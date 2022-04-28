@@ -16,11 +16,13 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 @Configuration
 @PropertySource(value = "classpath:database.properties")
 @ComponentScan(basePackages = {"com.spring.hibernate"})
+//@EnableTransactionManagement
 public class DBConfig {
 	
 	@Autowired
@@ -48,6 +50,7 @@ public class DBConfig {
 		return lsfb.getObject();
 	}
 	
+	
 	@Bean
 	public DataSource dataSource(){
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -58,12 +61,23 @@ public class DBConfig {
 		return dataSource;
 	}
 	
-	private Properties hibernateProperties() {
-		Properties properties = new Properties();
-		properties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
-		properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
-		properties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
-		return properties;
-	}
+	 @Bean
+	 public HibernateTransactionManager hibTransMan() {
+		 HibernateTransactionManager hibernateTransactionManager = new HibernateTransactionManager(); 
+		 hibernateTransactionManager.setSessionFactory(sessionFactory());
+		return hibernateTransactionManager;
+	 }
+
+	 
+	 private Properties hibernateProperties() {
+			Properties properties = new Properties();
+			properties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
+			properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
+			properties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
+			properties.put("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
+			return properties;
+		}
+	
+
 
 }
