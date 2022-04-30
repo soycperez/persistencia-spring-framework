@@ -17,9 +17,19 @@ public class Main {
 		//Asignar el bean al contenedor
 		StudentDAO studentDAO = context.getBean(StudentDAO.class);
 		
-		Student Cesar = new Student(5,"aidee", "puebla");
+		//Student Cesar = new Student(10,"Jesica", "cdmx");
+		//studentDAO.addStudent(Cesar);
 		
-		studentDAO.addStudent(Cesar);  
+		//studentDAO.listAll();
+		
+		//Actualizando student 
+		//Student Cesar = new Student(11,"cesar", "cdmx");
+		//studentDAO.updateStudent(Cesar.getStudenId(), Cesar);
+		
+		//Eleminando
+		//studentDAO.deleteStudent(9);
+		
+		studentDAO.findById(10);
 		
 		context.close();
 	}

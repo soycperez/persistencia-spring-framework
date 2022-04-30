@@ -18,6 +18,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @PropertySource(value = "classpath:database.properties")
@@ -28,38 +29,13 @@ public class DBConfig {
 	@Autowired
 	private Environment env; 
 	
-	@Bean
+	/*@Bean
 	public HibernateTemplate hibernateTemplate(){
 		HibernateTemplate hibernateTemplate = new HibernateTemplate(); 
 		hibernateTemplate.setSessionFactory(sessionFactory());
 		return hibernateTemplate;
-	}
-	
+	}*/
 
-	@Bean
-	public SessionFactory sessionFactory(){
-		LocalSessionFactoryBean lsfb = new LocalSessionFactoryBean();
-		lsfb.setDataSource(dataSource());
-		lsfb.setPackagesToScan("com.spring.hibernate.entities");
-		lsfb.setHibernateProperties(hibernateProperties());
-		try {
-		  lsfb.afterPropertiesSet();
-		} catch (IOException e) {
-		  e.printStackTrace();
-		}
-		return lsfb.getObject();
-	}
-	
-	
-	@Bean
-	public DataSource dataSource(){
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName(env.getProperty("jdbc.driver"));
-		dataSource.setUrl(env.getProperty("jdbc.url"));
-		dataSource.setUsername(env.getProperty("jdbc.username"));
-		dataSource.setPassword(env.getProperty("jdbc.password"));
-		return dataSource;
-	}
 	
 	 @Bean
 	 public HibernateTransactionManager hibTransMan() {
@@ -76,7 +52,33 @@ public class DBConfig {
 			properties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
 			properties.put("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
 			return properties;
+	}
+	 
+	@Bean
+	public SessionFactory sessionFactory(){
+		LocalSessionFactoryBean lsfb = new LocalSessionFactoryBean();
+		lsfb.setDataSource(dataSource());
+		lsfb.setPackagesToScan("com.spring.hibernate.entities");
+		lsfb.setHibernateProperties(hibernateProperties());
+		try {
+		  lsfb.afterPropertiesSet();
+		} catch (IOException e) {
+		  e.printStackTrace();
 		}
+		return lsfb.getObject();
+	}
+		
+	 
+		
+	@Bean
+	public DataSource dataSource(){
+			DriverManagerDataSource dataSource = new DriverManagerDataSource();
+			dataSource.setDriverClassName(env.getProperty("jdbc.driver"));
+			dataSource.setUrl(env.getProperty("jdbc.url"));
+			dataSource.setUsername(env.getProperty("jdbc.username"));
+			dataSource.setPassword(env.getProperty("jdbc.password"));
+			return dataSource;
+	}
 	
 
 
